@@ -5,21 +5,22 @@
 </p>
 
 # nwayo [![NPM version][npm-image]][npm-url] [![Travis build][travis-image]][travis-url] [![Dependencies][david-dep-image]][david-dep-url] [![Dev dependencies][david-devdep-image]][david-devdep-url]
-#### A modern website boilerplate
+#### CLI for [nwayo](https://github.com/absolunet/nwayo/)
 > /nwajo/ (haitian creole) The tough central part of various fruits, containing the seeds.
 
 ## Installation
-```
-> npm install -g nwayo
+```bash
+npm install -g nwayo
 ```
 
 ## Documentation
 Visit the [http://absolunet.github.io/nwayo](http://absolunet.github.io/nwayo) website for all the things.
+
 ## Release history
-See the [CHANGELOG](https://github.com/absolunet/nwayo/blob/master/CHANGELOG.md).
+See the [CHANGELOG](https://github.com/absolunet/nwayo-cli/blob/master/CHANGELOG.md).
 
 ## License 
-See the [LICENSE](https://github.com/absolunet/nwayo/blob/master/LICENSE.md).
+See the [LICENSE](https://github.com/absolunet/nwayo-cli/blob/master/LICENSE.md).
 
 
 [npm-url]: https://npmjs.org/package/nwayo

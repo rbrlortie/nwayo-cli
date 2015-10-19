@@ -1,29 +1,22 @@
  {
   "name":        "nwayo",
-  "version":     "3.0.0-alpha.5",
+  "version":     "3.0.1",
   "description": "A modern website boilerplate",
   "definition":  "/nwajo/ (haitian creole) The tough central part of various fruits, containing the seeds.",
   "homepage":    "http://absolunet.github.io/nwayo",
   "author":      { "name": "Absolunet", "url": "http://absolunet.com/" },
 
   "license":    "MIT",
-  "repository": { "url":   "git://github.com/absolunet/nwayo.git", "type":"git" },
-  "bugs":       { "url": "https://github.com/absolunet/nwayo/issues" },
+  "repository": { "url":   "git://github.com/absolunet/nwayo-cli.git", "type":"git" },
+  "bugs":       { "url": "https://github.com/absolunet/nwayo-cli/issues" },
 
   "bin":     { "nwayo": "bin/nwayo" },
   "engines": { "node":  ">= 4.1.2" },
   "scripts": {
-    "test":   "mocha",
-    "deploy": "gulp deploy",
-    "files":  "gulp files"
+    "test": "mocha"
   },
 
   "devDependencies": {
-    "gulp":            "3.9.0",
-    "gulp-gh-pages":   "0.5.3",
-    "gulp-preprocess": "1.2.0",
-    "gulp-rename":     "1.2.2",
-
     "mocha":           "2.3.3",
     "should":          "7.1.0",
     "stripcolorcodes": "0.1.0"
@@ -46,12 +39,12 @@
 
     "chalk":           "1.1.1",
     "inquirer":        "0.10.1",
-    "download":        "4.2.1",
+    "download":        "4.3.1",
     "download-status": "2.2.1",
     "gulp-ignore":     "2.0.1",
 
-    "david":     "6.2.0",
-    "bower":     "1.5.3",
+    "david":     "6.4.0",
+    "bower":     "1.6.3",
     "grunt-cli": "0.1.13"
   }
 }

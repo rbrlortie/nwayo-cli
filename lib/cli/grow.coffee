@@ -24,6 +24,9 @@ module.exports =
 
 	#-- Run
 	run: (context) ->
+		helper.echo 'Soon...\n'
+		return
+
 		inquirer = require 'inquirer'
 
 		helper.echo ''
