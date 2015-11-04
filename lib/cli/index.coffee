@@ -28,7 +28,7 @@ module.exports =
 		if context.command isnt 'index' and ( isDataFetching or fs.existsSync "#{__dirname}/#{context.command}.coffee" )
 
 			# if project command
-			if ['doctor','get','rebuild','run','watch', '--tasks'].indexOf(context.command) isnt -1
+			if ['doctor','get','rebuild','run','watch', '--projecttasks'].indexOf(context.command) isnt -1
 
 				# get project package.json file
 				if fs.existsSync "#{context.cwd}/package.json"
