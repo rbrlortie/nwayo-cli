@@ -17,8 +17,8 @@ module.exports =
 		# --
 
 		context =
-			command: argv[0]
-			target:  argv[1]
+			command: argv[0] or ''
+			target:  argv[1] or ''
 			targets: argv.slice 1
 			cwd:     cwd or __dirname
 
