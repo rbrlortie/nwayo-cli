@@ -45,6 +45,7 @@ analyze_bower = (callback) ->
 		bower.commands.list().on 'end', (deps) ->
 
 			for name, info of deps.dependencies
+				stable = false
 
 				if info.pkgMeta
 
