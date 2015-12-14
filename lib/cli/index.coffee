@@ -22,10 +22,10 @@ module.exports =
 			targets: argv.slice 1
 			cwd:     cwd or __dirname
 
-		isDataFetching = context.command.substring(0,2) is '--'
+		isFlag = context.command.substring(0,2) is '--'
 
 		# run command
-		if context.command isnt 'index' and ( isDataFetching or fs.existsSync "#{__dirname}/#{context.command}.coffee" )
+		if context.command isnt 'index' and ( isFlag or fs.existsSync "#{__dirname}/#{context.command}.coffee" )
 
 			# if project command
 			if ['doctor','get','rebuild','run','watch', '--projecttasks'].indexOf(context.command) isnt -1
@@ -40,7 +40,7 @@ module.exports =
 				else helper.error 'No package.json file found'
 
 
-			if isDataFetching
+			if isFlag
 
 				if context.command is '--completion'
 					data = fs.readFileSync "#{__dirname}/../../completion/bash", 'utf8'
@@ -50,7 +50,7 @@ module.exports =
 					files = fs.readdirSync "#{__dirname}"
 					tasks = []
 					for file in files
-						tasks.push file.substr(0, file.length-7) if file isnt 'index.coffee'
+						tasks.push file.substr(0, file.length-7) if file isnt 'index.coffee' and file.substring(0,5) isnt 'flag-'
 
 					helper.echo tasks.join '\n'
 
@@ -64,6 +64,12 @@ module.exports =
 						bundles.push file.substr(0, file.length-5) if file.substr(-5, 5) is '.yaml'
 
 					helper.echo bundles.join '\n'
+
+				else if context.command is '--version' or context.command is '--pronounce'
+					require("../cli/flag-#{context.command.substr(2)}").run context
+
+				else
+					helper.usage()
 
 
 			else
