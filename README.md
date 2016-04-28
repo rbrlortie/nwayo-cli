@@ -26,11 +26,11 @@ See the [LICENSE](https://github.com/absolunet/nwayo-cli/blob/master/LICENSE.md)
 [npm-url]: https://npmjs.org/package/nwayo
 [npm-image]: http://img.shields.io/npm/v/nwayo.svg?style=flat
 
-[travis-url]: https://travis-ci.org/absolunet/nwayo/builds
-[travis-image]: http://img.shields.io/travis/absolunet/nwayo.svg?style=flat
+[travis-url]: https://travis-ci.org/absolunet/nwayo-cli/builds
+[travis-image]: http://img.shields.io/travis/absolunet/nwayo-cli.svg?style=flat
 
-[david-dep-url]: https://david-dm.org/absolunet/nwayo
-[david-dep-image]: http://img.shields.io/david/absolunet/nwayo.svg?style=flat
+[david-dep-url]: https://david-dm.org/absolunet/nwayo-cli
+[david-dep-image]: http://img.shields.io/david/absolunet/nwayo-cli.svg?style=flat
 
-[david-devdep-url]: https://david-dm.org/absolunet/nwayo
-[david-devdep-image]: http://img.shields.io/david/dev/absolunet/nwayo.svg?style=flat
+[david-devdep-url]: https://david-dm.org/absolunet/nwayo-cli
+[david-devdep-image]: http://img.shields.io/david/dev/absolunet/nwayo-cli.svg?style=flat

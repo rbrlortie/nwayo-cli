@@ -40,7 +40,7 @@ describe 'nwayo', ->
 
 
 	describe 'version', ->
-		out = runCLI 'version'
+		out = runCLI '--version'
 
 		it 'should return the package version', ->
 			out.should.eql version
