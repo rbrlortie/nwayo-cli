@@ -4,7 +4,12 @@
 	</a>
 </p>
 
-# nwayo [![NPM version][npm-image]][npm-url] [![Travis build][travis-image]][travis-url] [![Dependencies][david-dep-image]][david-dep-url] [![Dev dependencies][david-devdep-image]][david-devdep-url]
+# nwayo
+[![NPM version](https://img.shields.io/npm/v/nwayo.svg)](https://www.npmjs.com/package/nwayo)
+[![Travis build](https://api.travis-ci.org/absolunet/nwayo-cli.svg?branch=master)](https://travis-ci.org/absolunet/nwayo-cli/builds)
+[![Dependencies](https://david-dm.org/absolunet/nwayo-cli/status.svg)](https://david-dm.org/absolunet/nwayo-cli)
+[![Dev dependencies](https://david-dm.org/absolunet/nwayo-cli/dev-status.svg)](https://david-dm.org/absolunet/nwayo-cli?type=dev)
+
 #### CLI for [nwayo](https://github.com/absolunet/nwayo/)
 > /nwajo/ (haitian creole) The tough central part of various fruits, containing the seeds.
 
@@ -21,16 +26,3 @@ See the [CHANGELOG](https://github.com/absolunet/nwayo-cli/blob/master/CHANGELOG
 
 ## License 
 See the [LICENSE](https://github.com/absolunet/nwayo-cli/blob/master/LICENSE.md).
-
-
-[npm-url]: https://npmjs.org/package/nwayo
-[npm-image]: http://img.shields.io/npm/v/nwayo.svg?style=flat
-
-[travis-url]: https://travis-ci.org/absolunet/nwayo-cli/builds
-[travis-image]: http://img.shields.io/travis/absolunet/nwayo-cli.svg?style=flat
-
-[david-dep-url]: https://david-dm.org/absolunet/nwayo-cli
-[david-dep-image]: http://img.shields.io/david/absolunet/nwayo-cli.svg?style=flat
-
-[david-devdep-url]: https://david-dm.org/absolunet/nwayo-cli
-[david-devdep-image]: http://img.shields.io/david/dev/absolunet/nwayo-cli.svg?style=flat
