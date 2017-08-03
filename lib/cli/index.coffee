@@ -35,7 +35,13 @@ module.exports =
 					context.pkg = require "#{context.cwd}/package"
 
 					# check for nwayo config info
-					if not context.pkg.nwayo then helper.error 'No nwayo config found'
+					oldconfig = !!context.pkg.nwayo
+					newconfig = !!context.pkg.dependencies['@absolunet/nwayo-workflow']
+
+					if oldconfig and newconfig then helper.error 'Please remove \'nwayo\' config in package.json'
+					if not oldconfig and not newconfig then helper.error 'No nwayo config found'
+
+					context.prjnwayoversion = if newconfig then context.pkg.dependencies['@absolunet/nwayo-workflow'] else context.pkg.nwayo.version
 
 				else helper.error 'No package.json file found'
 

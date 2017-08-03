@@ -60,7 +60,7 @@ module.exports =
 		fs     = require 'fs'
 		semver = require 'semver'
 
-		tool = if semver.lt context.pkg.nwayo.version, '2.2.0' then 'grunt' else 'gulp'
+		tool = if semver.lt context.prjnwayoversion, '2.2.0' then 'grunt' else 'gulp'
 		base = "#{context.cwd}/node_modules/#{tool}"
 
 		if fs.existsSync "#{base}/package.json"
@@ -72,6 +72,9 @@ module.exports =
 				when 'gulp'
 					pkg = require "#{base}/package"
 					bin = "#{base}/#{pkg.bin.gulp}"
+
+					if semver.gte context.prjnwayoversion, '3.2.0'
+						arg.push '--gulpfile', "#{context.cwd}/node_modules/@absolunet/nwayo-workflow/gulpfile.js"
 
 				when 'grunt'
 					grunt_cli = "#{__dirname}/../../node_modules/grunt-cli"
