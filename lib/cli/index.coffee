@@ -36,7 +36,7 @@ module.exports =
 
 					# check for nwayo config info
 					oldconfig = !!context.pkg.nwayo
-					newconfig = !!context.pkg.dependencies['@absolunet/nwayo-workflow']
+					newconfig = context.pkg.dependencies && context.pkg.dependencies['@absolunet/nwayo-workflow']
 
 					if oldconfig and newconfig then helper.error 'Please remove \'nwayo\' config in package.json'
 					if not oldconfig and not newconfig then helper.error 'No nwayo config found'
