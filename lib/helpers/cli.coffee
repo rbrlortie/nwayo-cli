@@ -61,7 +61,7 @@ module.exports =
 		semver = require 'semver'
 
 		tool = if semver.lt context.prjnwayoversion, '2.2.0' then 'grunt' else 'gulp'
-		base = "#{context.cwd}/node_modules/#{tool}"
+		base = if semver.gte context.prjnwayoversion, '3.2.0' then "#{context.cwd}/node_modules/@absolunet/nwayo-workflow/node_modules/#{tool}" else "#{context.cwd}/node_modules/#{tool}"
 
 		if fs.existsSync "#{base}/package.json"
 			bin = ''
