@@ -73,6 +73,8 @@ module.exports =
 					pkg = require "#{base}/package"
 					bin = "#{base}/#{pkg.bin.gulp}"
 
+					arg.push '--cwd', context.cwd
+
 					if semver.gte context.prjnwayoversion, '3.2.0'
 						arg.push '--gulpfile', "#{context.cwd}/node_modules/@absolunet/nwayo-workflow/gulpfile.js"
 
@@ -81,6 +83,7 @@ module.exports =
 					pkg = require "#{grunt_cli}/package"
 
 					bin = "#{grunt_cli}/#{pkg.bin.grunt}"
+					arg.push '--base', context.cwd
 					arg.push '--gruntfile', "#{context.cwd}/gruntfile.js"
 
 
