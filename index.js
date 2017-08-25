@@ -35,7 +35,7 @@ module.exports = () => {
 			const config = yaml.safeLoad(fs.readFileSync(configFilepath, 'utf8'));
 			const cwd    = path.normalize(`${path.dirname(configFilepath)}/${config.root}`);
 
-			require(`${cwd}/node_modules/@absolunet/nwayo-workflow/cli`)({ config, cwd, version });
+			require(`${cwd}/node_modules/@absolunet/nwayo-workflow/cli`)({ config, cwd, infos: { version, path:__dirname } });
 
 		// Legacy
 		} else {
