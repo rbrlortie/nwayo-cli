@@ -10,10 +10,7 @@ module.exports =
 
 	#-- Arguments value
 	argv: (argv, cwd) ->
-		path   = require 'path'
-		fs     = require 'fs'
-		findUp = require 'find-up'
-		yaml   = require 'js-yaml'
+		fs = require 'fs'
 
 		# make echos trappable in tests
 		helper.echo = console.log
@@ -23,6 +20,7 @@ module.exports =
 			command: argv[0] or ''
 			target:  argv[1] or ''
 			targets: argv.slice 1
+			cwd:     cwd or __dirname
 
 		isFlag = context.command.substring(0,2) is '--'
 
@@ -30,38 +28,25 @@ module.exports =
 		if context.command isnt 'index' and ( isFlag or fs.existsSync "#{__dirname}/#{context.command}.coffee" )
 
 			# if project command
-			if ['doctor','get','rebuild','run','watch', '--projecttasks', '--projectbundles'].indexOf(context.command) isnt -1
+			if ['doctor','get','rebuild','run','watch', '--projecttasks'].indexOf(context.command) isnt -1
 
-				configFilepath = findUp.sync 'nwayo.yaml', { cwd: cwd }
+				# get project package.json file
+				if fs.existsSync "#{context.cwd}/package.json"
+					context.pkg = require "#{context.cwd}/package"
 
-				if configFilepath isnt null
-					config = yaml.safeLoad fs.readFileSync(configFilepath, 'utf8');
-					context.cwd = fs.realpathSync path.dirname(configFilepath) + '/' + config.root
+					# check for nwayo config info
+					if not context.pkg.nwayo then helper.error 'No nwayo config found'
 
-					# get project package.json file
-					if fs.existsSync "#{context.cwd}/package.json"
-						context.pkg = require "#{context.cwd}/package"
-
-						# check for nwayo config info
-						oldconfig = !!context.pkg.nwayo
-						newconfig = Boolean(context.pkg.dependencies && context.pkg.dependencies['@absolunet/nwayo-workflow'])
-
-						if oldconfig and newconfig then helper.error 'Please remove \'nwayo\' config in package.json'
-						if not oldconfig and not newconfig then helper.error 'No nwayo config found'
-
-						context.prjnwayoversion = if newconfig then context.pkg.dependencies['@absolunet/nwayo-workflow'] else context.pkg.nwayo.version
-
-						#context.prjnwayoversion = if context.prjnwayoversion == 'file:../../_atelier/nwayo' then '3.3.0' else context.prjnwayoversion
-
-					else helper.error 'No package.json file found'
-
-				else
-					helper.error 'No nwayo.yaml file found'
+				else helper.error 'No package.json file found'
 
 
 			if isFlag
 
-				if context.command is '--tasks'
+				if context.command is '--completion'
+					data = fs.readFileSync "#{__dirname}/../../completion/bash", 'utf8'
+					helper.echo data
+
+				else if context.command is '--tasks'
 					files = fs.readdirSync "#{__dirname}"
 					tasks = []
 					for file in files
@@ -73,18 +58,22 @@ module.exports =
 					helper.run '--tasks-simple', context
 
 				else if context.command is '--projectbundles'
-					dirs = fs.readdirSync "#{context.cwd}/bundles/"
-					helper.echo dirs.join '\n'
+					files = fs.readdirSync "#{context.cwd}/bundles/"
+					bundles = []
+					for file in files
+						bundles.push file.substr(0, file.length-5) if file.substr(-5, 5) is '.yaml'
+
+					helper.echo bundles.join '\n'
 
 				else if context.command is '--version' or context.command is '--pronounce'
-					require("#{__dirname}/flag-#{context.command.substr(2)}").run context
+					require("../cli/flag-#{context.command.substr(2)}").run context
 
 				else
 					helper.usage()
 
 
 			else
-				require("#{__dirname}/#{context.command}").run context
+				require("../cli/#{context.command}").run context
 
 
 		else
