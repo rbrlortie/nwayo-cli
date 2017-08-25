@@ -42,11 +42,7 @@ module.exports =
 
 			if isFlag
 
-				if context.command is '--completion'
-					data = fs.readFileSync "#{__dirname}/../../completion/bash", 'utf8'
-					helper.echo data
-
-				else if context.command is '--tasks'
+				if context.command is '--tasks'
 					files = fs.readdirSync "#{__dirname}"
 					tasks = []
 					for file in files
@@ -66,14 +62,14 @@ module.exports =
 					helper.echo bundles.join '\n'
 
 				else if context.command is '--version' or context.command is '--pronounce'
-					require("../cli/flag-#{context.command.substr(2)}").run context
+					require("../tasks/flag-#{context.command.substr(2)}").run context
 
 				else
 					helper.usage()
 
 
 			else
-				require("../cli/#{context.command}").run context
+				require("../tasks/#{context.command}").run context
 
 
 		else

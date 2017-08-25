@@ -6,7 +6,6 @@
 helper = require '../helpers/cli'
 fs     = require 'fs'
 chalk  = require 'chalk'
-_      = require 'lodash'
 
 context = null
 
@@ -39,7 +38,7 @@ analyze_bower = (callback) ->
 		bower  = require 'bower'
 		semver = require 'semver'
 
-		isPreVersion = (v1, v2) -> _.includes ['premajor', 'preminor', 'prepatch', 'prerelease'], semver.diff v1, v2
+		isPreVersion = (v1, v2) -> ['premajor', 'preminor', 'prepatch', 'prerelease'].includes semver.diff v1, v2
 
 		data = outdated: []
 		bower.commands.list().on 'end', (deps) ->
