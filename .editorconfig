@@ -2,7 +2,7 @@
 
 root = true
 
-[*.{css,less,scss,coffee,js,html}]
+[*.js]
 indent_style = tab
 charset = utf-8
 trim_trailing_whitespace = true
@@ -14,7 +14,7 @@ charset = utf-8
 trim_trailing_whitespace = false
 insert_final_newline = true
 
-[{.editorconfig,.gitignore,.npmignore,coffeelint.json,package.json,.travis.yml}]
+[{.editorconfig,.eslintrc.yaml,.gitignore,.npmignore,.sublimelinterrc,.travis.yml,package.json}]
 indent_style = space
 indent_size = 2
 charset = utf-8

@@ -6,7 +6,7 @@
 
 #-- PUBLIC
 module.exports =
-	pkg: require '../../package'
+	pkg: require "#{__dirname}/../../package"
 
 
 	#-- Echo
@@ -49,7 +49,7 @@ module.exports =
 			chalk.yellow('nwayo --completion') + '     Bash completion code'
 			chalk.yellow('nwayo --pronounce') + '      How to pronounce'
 			''
-			"nwayo@#{@pkg.version} #{path.normalize "#{__dirname}../../.."}"
+			"nwayo@#{@pkg.version} #{path.normalize "#{__dirname}/../"}"
 			''
 		].join '\n '
 
@@ -75,7 +75,10 @@ module.exports =
 
 					arg.push '--cwd', context.cwd
 
-					if semver.gte context.prjnwayoversion, '3.2.0'
+					if semver.gte context.prjnwayoversion, '3.3.0'
+						arg.push '--gulpfile', "#{context.cwd}/node_modules/@absolunet/nwayo-workflow/workflow/gulpfile.js"
+
+					else if semver.gte context.prjnwayoversion, '3.2.0'
 						arg.push '--gulpfile', "#{context.cwd}/node_modules/@absolunet/nwayo-workflow/gulpfile.js"
 
 				when 'grunt'

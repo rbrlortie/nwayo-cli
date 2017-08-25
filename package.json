@@ -1,7 +1,7 @@
 {
   "name": "nwayo",
   "version": "3.1.2",
-  "description": "A modern website boilerplate",
+  "description": "CLI for nwayo",
   "definition": "/nwajo/ (haitian creole) The tough central part of various fruits, containing the seeds.",
   "homepage": "http://absolunet.github.io/nwayo",
   "author": {
@@ -20,21 +20,19 @@
     "nwayo": "bin/nwayo"
   },
   "engines": {
-    "node": ">= 8.2.1"
+    "node": ">= 8.4.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "ava"
   },
   "devDependencies": {
-    "mocha": "3.5.0",
-    "should": "11.2.1",
-    "stripcolorcodes": "0.1.0"
+    "@absolunet/tester": "1.0.1"
   },
   "dependencies": {
     "adm-zip": "0.4.7",
     "async": "2.5.0",
     "bower": "1.8.0",
-    "chalk": "2.0.1",
+    "chalk": "2.1.0",
     "cli-spinner": "0.2.6",
     "coffee-script": "1.12.7",
     "david": "11.0.0",
@@ -44,8 +42,8 @@
     "find-up": "2.1.0",
     "grunt-cli": "1.2.0",
     "gulp-ignore": "2.0.2",
-    "inquirer": "3.2.1",
-    "js-yaml": "3.8.4",
+    "inquirer": "3.2.2",
+    "js-yaml": "3.9.1",
     "lodash": "4.17.4",
     "minimist": "1.2.0",
     "preprocess": "3.1.0",

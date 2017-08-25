@@ -44,12 +44,14 @@ module.exports =
 
 						# check for nwayo config info
 						oldconfig = !!context.pkg.nwayo
-						newconfig = context.pkg.dependencies && context.pkg.dependencies['@absolunet/nwayo-workflow']
+						newconfig = Boolean(context.pkg.dependencies && context.pkg.dependencies['@absolunet/nwayo-workflow'])
 
 						if oldconfig and newconfig then helper.error 'Please remove \'nwayo\' config in package.json'
 						if not oldconfig and not newconfig then helper.error 'No nwayo config found'
 
 						context.prjnwayoversion = if newconfig then context.pkg.dependencies['@absolunet/nwayo-workflow'] else context.pkg.nwayo.version
+
+						#context.prjnwayoversion = if context.prjnwayoversion == 'file:../../_atelier/nwayo' then '3.3.0' else context.prjnwayoversion
 
 					else helper.error 'No package.json file found'
 
@@ -59,11 +61,7 @@ module.exports =
 
 			if isFlag
 
-				if context.command is '--completion'
-					data = fs.readFileSync "#{__dirname}/../../completion/bash", 'utf8'
-					helper.echo data
-
-				else if context.command is '--tasks'
+				if context.command is '--tasks'
 					files = fs.readdirSync "#{__dirname}"
 					tasks = []
 					for file in files
@@ -79,14 +77,14 @@ module.exports =
 					helper.echo dirs.join '\n'
 
 				else if context.command is '--version' or context.command is '--pronounce'
-					require("../cli/flag-#{context.command.substr(2)}").run context
+					require("#{__dirname}/flag-#{context.command.substr(2)}").run context
 
 				else
 					helper.usage()
 
 
 			else
-				require("../cli/#{context.command}").run context
+				require("#{__dirname}/#{context.command}").run context
 
 
 		else

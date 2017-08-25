@@ -1,8 +1,7 @@
 test
 .editorconfig
+.eslintrc.yaml
 .gitignore
+.sublimelinterrc
 .travis.yml
-bower.json
-coffeelint.json
-gulpfile.js
-nwayo.sublime-project
+*.sublime-project
