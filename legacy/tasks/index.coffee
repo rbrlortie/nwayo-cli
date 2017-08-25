@@ -61,7 +61,7 @@ module.exports =
 
 					helper.echo bundles.join '\n'
 
-				else if context.command is '--version' or context.command is '--pronounce'
+				else if context.command is '--pronounce'
 					require("../tasks/flag-#{context.command.substr(2)}").run context
 
 				else
