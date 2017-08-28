@@ -24,7 +24,7 @@ module.exports = () => {
 		console.log(version);
 
 	} else if (argv.completion) {
-		console.log(`completion mumbo jumbo`);
+		console.log(fs.readFileSync(`${__dirname}/completion/bash`, 'utf8'));
 
 	} else {
 
