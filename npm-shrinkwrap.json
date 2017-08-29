@@ -1,6 +1,6 @@
 {
-  "name": "nwayo",
-  "version": "3.1.2",
+  "name": "@absolunet/nwayo-cli",
+  "version": "1.0.0",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
@@ -76,7 +76,7 @@
         "d": "1.0.0",
         "es5-ext": "0.10.30",
         "es6-iterator": "2.0.1",
-        "memoizee": "0.4.6",
+        "memoizee": "0.4.9",
         "timers-ext": "0.1.2"
       }
     },
@@ -315,9 +315,9 @@
       }
     },
     "memoizee": {
-      "version": "0.4.6",
-      "resolved": "https://registry.npmjs.org/memoizee/-/memoizee-0.4.6.tgz",
-      "integrity": "sha1-BDk+RUE3OSGognT/yG0ITSiGFLs=",
+      "version": "0.4.9",
+      "resolved": "https://registry.npmjs.org/memoizee/-/memoizee-0.4.9.tgz",
+      "integrity": "sha1-6hwAX1xMMdiaShDiTbg/v2HN1PM=",
       "requires": {
         "d": "1.0.0",
         "es5-ext": "0.10.30",

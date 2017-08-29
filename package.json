@@ -1,6 +1,6 @@
 {
-  "name": "nwayo",
-  "version": "3.1.2",
+  "name": "@absolunet/nwayo-cli",
+  "version": "1.0.0",
   "description": "CLI for nwayo",
   "definition": "/nwajo/ (haitian creole) The tough central part of various fruits, containing the seeds.",
   "homepage": "http://absolunet.github.io/nwayo",
@@ -23,10 +23,10 @@
     "node": ">= 8.4.0"
   },
   "scripts": {
-    "test": "ava"
+    "test": "ava test"
   },
   "devDependencies": {
-    "@absolunet/tester": "1.0.1"
+    "@absolunet/tester": "1.1.0"
   },
   "dependencies": {
     "chalk": "2.1.0",
