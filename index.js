@@ -3,53 +3,56 @@
 //--------------------------------------------------------
 'use strict';
 
-const chalk    = require('chalk');
-const findUp   = require('find-up');
-const fs       = require('fs');
-const minimist = require('minimist');
-const path     = require('path');
-const yaml     = require('js-yaml');
-
-
+const chalk          = require('chalk');
+const findUp         = require('find-up');
+const fs             = require('fs');
+const minimist       = require('minimist');
+const path           = require('path');
+const updateNotifier = require('update-notifier');
+const yaml           = require('js-yaml');
 
 
 
 /* eslint-disable no-console, global-require */
 module.exports = () => {
 
-	const { version } = require('./package');
-	const argv        = minimist(process.argv.slice(2));
+	const pkg = require('./package');
 
-	if (argv.v || argv.version) {
-		console.log(version);
+	// Check for updates and be obnoxious about it
+	updateNotifier({ pkg:pkg, updateCheckInterval:1 }).notify();
 
-	} else if (argv.completion) {
-		console.log(fs.readFileSync(`${__dirname}/completion/bash`, 'utf8'));
+	// If nwayo config
+	const configFilepath = findUp.sync('nwayo.yaml', { cwd:process.cwd() });
 
+	if (configFilepath !== null) {
+		const config = yaml.safeLoad(fs.readFileSync(configFilepath, 'utf8'));
+		const cwd    = path.normalize(`${path.dirname(configFilepath)}/${config.root}`);
+
+		require(`${cwd}/node_modules/@absolunet/nwayo-workflow/cli`)({
+			config: config,
+			cwd:    cwd,
+			infos:  {
+				version: pkg.version,
+				path:    __dirname
+			}
+		});
+
+	// Legacy
 	} else {
 
-		const configFilepath = findUp.sync('nwayo.yaml', { cwd:process.cwd() });
+		const argv = minimist(process.argv.slice(2));
 
-		// If nwayo config
-		if (configFilepath !== null) {
-			const config = yaml.safeLoad(fs.readFileSync(configFilepath, 'utf8'));
-			const cwd    = path.normalize(`${path.dirname(configFilepath)}/${config.root}`);
+		if (argv.v || argv.version) {
+			console.log(pkg.version);
 
-			require(`${cwd}/node_modules/@absolunet/nwayo-workflow/cli`)({
-				config: config,
-				cwd:    cwd,
-				infos:  {
-					version: version,
-					path:    __dirname
-				}
-			});
+		} else if (argv.completion) {
+			console.log(fs.readFileSync(`${__dirname}/completion/bash`, 'utf8'));
 
-		// Legacy
 		} else {
+
 			console.log(chalk.yellow(` [Legacy mode]\n\n`));
 			require('./legacy')();
 		}
 	}
 
 };
-
