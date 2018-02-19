@@ -29,12 +29,10 @@ module.exports = () => {
 		const cwd    = path.normalize(`${path.dirname(configFilepath)}/${config.root}`);
 
 		require(`${cwd}/node_modules/@absolunet/nwayo-workflow/cli`)({
-			config: config,
-			cwd:    cwd,
-			infos:  {
-				version: pkg.version,
-				path:    __dirname
-			}
+			config:  config,
+			cwd:     cwd,
+			cliPkg:  pkg,
+			cliPath: __dirname
 		});
 
 	// Legacy
