@@ -5,18 +5,21 @@
 
 const chalk          = require('chalk');
 const findUp         = require('find-up');
-const fs             = require('fs');
+const yaml           = require('js-yaml');
 const minimist       = require('minimist');
 const path           = require('path');
 const updateNotifier = require('update-notifier');
-const yaml           = require('js-yaml');
+const fss            = require('@absolunet/fss');
+const terminal       = require('@absolunet/terminal');
 
 
 
-/* eslint-disable no-console, global-require */
+
+
+
 module.exports = () => {
 
-	const pkg = require('./package');
+	const pkg = require('./package');  // eslint-disable-line global-require
 
 	// Check for updates and be obnoxious about it
 	updateNotifier({ pkg:pkg, updateCheckInterval:1 }).notify();
@@ -25,13 +28,30 @@ module.exports = () => {
 	const configFilepath = findUp.sync('nwayo.yaml', { cwd:process.cwd() });
 
 	if (configFilepath !== null) {
-		const config = yaml.safeLoad(fs.readFileSync(configFilepath, 'utf8'));
-		const cwd    = path.normalize(`${path.dirname(configFilepath)}/${config.root}`);
+		const config   = yaml.safeLoad(fss.readFile(configFilepath, 'utf8'));
+		const cwd      = path.normalize(`${path.dirname(configFilepath)}/${config.root}`);
+		const workflow = `${cwd}/node_modules/@absolunet/nwayo-workflow`;
 
-		require(`${cwd}/node_modules/@absolunet/nwayo-workflow/cli`)({
-			cliPkg:  pkg,
-			cliPath: __dirname
-		});
+		if (fss.exists(workflow)) {
+			require(`${workflow}/cli`)({  // eslint-disable-line global-require
+
+				// nwayo-workflow < 3.5.0
+				cwd:    cwd,
+				infos:  {
+					version: pkg.version,
+					path:    __dirname
+				},
+
+				// nwayo-workflow >= 3.5.0
+				cliPkg:  pkg,
+				cliPath: __dirname
+
+			});
+
+		} else {
+			terminal.exit(`Workflow not installed\nPlease run ${chalk.underline('nwayo install workflow')}`);
+		}
+
 
 	// Legacy
 	} else {
@@ -39,15 +59,15 @@ module.exports = () => {
 		const argv = minimist(process.argv.slice(2));
 
 		if (argv.v || argv.version) {
-			console.log(pkg.version);
+			terminal.echo(pkg.version);
 
 		} else if (argv.completion) {
-			console.log(fs.readFileSync(`${__dirname}/completion/bash`, 'utf8'));
+			terminal.echo(fss.readFile(`${__dirname}/completion/bash`, 'utf8'));
 
 		} else {
 
-			console.log(chalk.yellow(` [Legacy mode]\n\n`));
-			require('./legacy')();
+			terminal.echo(chalk.yellow(` [Legacy mode]\n\n`));
+			require('./legacy')();  // eslint-disable-line global-require
 		}
 	}
 
