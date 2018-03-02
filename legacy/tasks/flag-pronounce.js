@@ -3,8 +3,8 @@
 //-------------------------------------
 'use strict';
 
-const helper    = require('../helpers/cli');
 const { spawn } = require('child_process');
+const helper    = require('../helpers/cli');
 
 
 //-- PUBLIC

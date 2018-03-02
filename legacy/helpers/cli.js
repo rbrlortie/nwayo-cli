@@ -4,10 +4,10 @@
 'use strict';
 
 const chalk  = require('chalk');
+const spawn  = require('cross-spawn');
 const fs     = require('fs');
 const path   = require('path');
 const semver = require('semver');
-const spawn  = require('cross-spawn');
 
 //-- PUBLIC
 module.exports = {

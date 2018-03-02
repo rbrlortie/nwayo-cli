@@ -6,10 +6,10 @@
 const async       = require('async');
 const bower       = require('bower');
 const chalk       = require('chalk');
+const { Spinner } = require('cli-spinner');
 const david       = require('david');
 const fs          = require('fs');
 const semver      = require('semver');
-const { Spinner } = require('cli-spinner');
 const helper      = require('../helpers/cli');
 
 let context = null;

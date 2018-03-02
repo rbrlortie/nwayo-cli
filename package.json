@@ -20,7 +20,7 @@
     "nwayo": "bin/nwayo"
   },
   "engines": {
-    "node": ">= 9.5.0"
+    "node": ">= 9.7.1"
   },
   "scripts": {
     "test": "ava test"
@@ -34,7 +34,7 @@
     "js-yaml": "3.10.0",
     "minimist": "1.2.0",
     "update-notifier": "2.3.0",
-    "@absolunet/fss": "0.5.0",
+    "@absolunet/fss": "0.7.0",
     "@absolunet/terminal": "0.4.4",
 
     "async": "2.6.0",
