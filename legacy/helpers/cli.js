@@ -71,6 +71,7 @@ module.exports = {
 				case 'gulp':
 					pkg = require(`${base}/package`);  // eslint-disable-line global-require
 					bin = `${base}/${pkg.bin.gulp}`;
+					arg.push('--cwd', context.cwd);
 					break;
 
 				case 'grunt':

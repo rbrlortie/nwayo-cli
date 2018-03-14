@@ -94,7 +94,7 @@ module.exports = () => {
 	if (fss.exists(nodeModules)) {
 
 		//-- If uses workflow as a package
-		if (projetPkg.dependencies[WORKFLOW]) {
+		if (projetPkg.dependencies && projetPkg.dependencies[WORKFLOW]) {
 
 			const workflow = `${nodeModules}/${WORKFLOW}`;
 
@@ -123,7 +123,7 @@ module.exports = () => {
 		//-- Ricochet to legacy
 		} else {
 			terminal.echo(chalk.yellow(`\n [Legacy mode]\n\n`));
-			require('./legacy')();  // eslint-disable-line global-require
+			require('./legacy')({ root });  // eslint-disable-line global-require
 		}
 
 	// Duuuuude.... Install the workflow

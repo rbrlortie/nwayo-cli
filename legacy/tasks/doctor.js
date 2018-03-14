@@ -22,10 +22,21 @@ const analyzeNode = (callback) => {
 		outdated: []
 	};
 
-	return david.getUpdatedDependencies(context.pkg, { dev:true }, (er, deps) => {
-		if (Object.keys(deps).length) {
+	return async.parallel({
+		dev: (cb) => {
+			david.getUpdatedDependencies(context.pkg, { dev:true }, (er, deps) => {
+				cb(null, deps);
+			});
+		},
+		prod: (cb) => {
+			david.getUpdatedDependencies(context.pkg, { dev:false }, (er, deps) => {
+				cb(null, deps);
+			});
+		}
+	}, (error, results) => {
 
-			deps.forEach((version, name) => {
+		Object.entries(results).forEach(([, deps]) => {
+			Object.entries(deps).forEach(([name, version]) => {
 				if (version.required !== version.stable) {
 					data.outdated.push({
 						name: name,
@@ -34,7 +45,7 @@ const analyzeNode = (callback) => {
 					});
 				}
 			});
-		}
+		});
 
 		callback(null, data);
 	});
@@ -55,7 +66,7 @@ const analyzeBower = (callback) => {
 			outdated: []
 		};
 
-		return bower.commands.list().on('end', (deps) => {
+		return bower.commands.list(null, { cwd:context.cwd }).on('end', (deps) => {
 
 			for (const name in deps.dependencies) {
 				if (Object.prototype.hasOwnProperty.call(deps.dependencies, name)) {
