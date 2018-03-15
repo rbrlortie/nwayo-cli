@@ -77,7 +77,7 @@ module.exports = () => {
 
 	//-- Trap 'nwayo install workflow'
 	const nodeModules = `${root}/node_modules`;
-	if (Object.keys(argv).length === 1 && argv._.length === 2 && argv._[0] === 'install' && argv._[1] === 'workflow') {
+	const npmInstall = () => {
 		fss.del(nodeModules);
 		fss.del(`${root}/package-lock.json`);
 
@@ -85,7 +85,10 @@ module.exports = () => {
 			cd ${root}
 			npm install
 		`);
+	};
 
+	if (Object.keys(argv).length === 1 && argv._.length === 2 && argv._[0] === 'install' && argv._[1] === 'workflow') {
+		npmInstall();
 		terminal.exit();
 	}
 
@@ -110,8 +113,9 @@ module.exports = () => {
 					},
 
 					// nwayo-workflow >= 3.5.0
-					cliPkg:  cliPkg,
-					cliPath: __dirname
+					cliPkg:            cliPkg,
+					cliPath:           __dirname,
+					workflowInstaller: npmInstall
 
 				});
 
