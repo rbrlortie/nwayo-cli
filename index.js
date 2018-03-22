@@ -48,7 +48,7 @@ const echo = (msg) => {
 };
 
 const exit = (msg) => {
-	if (msg) {
+	if (msg && !argv['completion-logic']) {
 		const terminal = require('@absolunet/terminal');
 		terminal.exit(msg);
 	} else {
@@ -142,7 +142,13 @@ module.exports = () => {
 				//-- Trap `--completion-logic`
 				const completion = flag('completion-logic');
 				if (completion) {
-					echo(require(`${workflow}/completion`)(completion));
+
+					const completionLogic = `${workflow}/completion`;
+					if (fs.existsSync(completionLogic)) {
+						echo(require(`${workflow}/completion`)({ completion, root }));
+					} else {
+						echo(require(`./legacy/completion`)({ completion, root }));
+					}
 					exit();
 				}
 
@@ -176,7 +182,7 @@ module.exports = () => {
 			//-- Trap `--completion-logic`
 			const completion = flag('completion-logic');
 			if (completion) {
-				echo(require(`./legacy/completion`)(completion));
+				echo(require(`./legacy/completion`)({ completion, root }));
 				exit();
 			}
 

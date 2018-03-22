@@ -6,28 +6,32 @@
 // We disable global require rule to optimize the speed of the CLI for unrelated workflow stuff
 /* eslint-disable global-require */
 
-const LEVEL1_CMDS    = ['run', 'rebuild', 'watch', 'install', 'doctor'];
+const TASKS = [
+	'assets', 'assets-fonts', 'assets-images-optimization', 'assets-images-highdensity', 'assets-raw', 'assets-images',
+	'icons', 'icons-favicon', 'icons-share', 'icons-tile',
+	'local', 'local-constants',
+	'scripts', 'scripts-lint', 'scripts-constants', 'scripts-vendors', 'scripts-compile',
+	'styles', 'styles-images', 'styles-lint', 'styles-constants', 'styles-compile',
+	'rebuild', 'rebuild-ss',
+	'watch'
+];
 const LEVEL1_FLAGS   = ['-h', '--help', '-v', '--version', '--pronounce'];
-const REBUILD_FLAGS  = ['--prod'];
 
 
-const bundles = () => {
+const flag = (items, flags) => {
+	return items.pop().startsWith('-') ? flags : [];
+};
+
+
+const level1Cmds = () => {
 	const fs = require('fs');
 
 	const list = [];
-	fs.readdirSync(`${__dirname}/stubs/`).forEach((bundleName) => {
-		const [, bundle] = bundleName.match(/^([a-zA-Z0-9-]+)$/) || [];
+	fs.readdirSync(`${__dirname}/../tasks`).forEach((cmdName) => {
+		const [, cmd] = cmdName.match(/^([a-zA-Z0-9-]+).js$/) || [];
 
-		if (bundle) {
-			list.push(bundle);
-
-			fs.readdirSync(`${__dirname}/stubs/${bundle}`).forEach((subbundleName) => {
-				const [, subbundle] = subbundleName.match(/^_([a-zA-Z0-9-]+)\.yaml$/) || [];
-
-				if (subbundle) {
-					list.push(`${bundle}:${subbundle}`);
-				}
-			});
+		if (cmd && cmd !== 'index' && cmd !== 'flag-pronounce') {
+			list.push(cmd);
 		}
 	});
 
@@ -35,8 +39,34 @@ const bundles = () => {
 };
 
 
-const tasks = () => {
-	return ['assets', 'scripts'];
+const bundles = (root) => {
+	const fs  = require('fs');
+	const dir = `${root}/bundles`;
+
+	const list = [];
+	if (fs.existsSync(dir)) {
+		fs.readdirSync(dir).forEach((bundleName) => {
+			const [, bundleDir]  = bundleName.match(/^([a-zA-Z0-9-]+)$/) || [];
+			const [, bundleFile] = bundleName.match(/^([a-zA-Z0-9-]+).yaml$/) || [];
+
+			if (bundleFile) {
+				list.push(bundleFile);
+
+			} else if (bundleDir) {
+				list.push(bundleDir);
+
+				fs.readdirSync(`${dir}/${bundleDir}`).forEach((subbundleName) => {
+					const [, subbundle] = subbundleName.match(/^_([a-zA-Z0-9-]+)\.yaml$/) || [];
+
+					if (subbundle) {
+						list.push(`${bundleDir}:${subbundle}`);
+					}
+				});
+			}
+		});
+	}
+
+	return list;
 };
 
 
@@ -44,8 +74,8 @@ const tasks = () => {
 
 
 
-module.exports = (data) => {
-	const items = data.split(' ');
+module.exports = ({ completion, root }) => {
+	const items = completion.split(' ');
 	items.shift();
 
 	let values = [];
@@ -53,26 +83,18 @@ module.exports = (data) => {
 	switch (items.length) {
 
 		case 1:
-			values = [].concat(LEVEL1_CMDS, LEVEL1_FLAGS);
+			values = [].concat(level1Cmds(), flag(items, LEVEL1_FLAGS));
 			break;
 
 		case 2:
 			switch (items[0]) {
 
 				case 'run':
-					values = tasks();
+					values = TASKS;
 					break;
 
 				case 'rebuild':
-					values = bundles().concat(REBUILD_FLAGS);
-					break;
-
-				case 'watch':
-					values = bundles();
-					break;
-
-				case 'install':
-					values = ['workflow', 'vendors'];
+					values = bundles(root);
 					break;
 
 				default: break;
@@ -84,11 +106,7 @@ module.exports = (data) => {
 			switch (items[0]) {
 
 				case 'run':
-					values = bundles();
-					break;
-
-				case 'rebuild':
-					values = REBUILD_FLAGS;
+					values = bundles(root);
 					break;
 
 				default: break;
