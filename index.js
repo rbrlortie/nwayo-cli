@@ -116,10 +116,7 @@ module.exports = () => {
 		fss.del(nodeModules);
 		fss.del(`${root}/package-lock.json`);
 
-		terminal.run(`
-			cd ${root}
-			npm install
-		`);
+		terminal.run(`cd ${root} && npm install --no-audit`);
 	};
 
 	if (Object.keys(argv).length === 1 && argv._.length === 2 && argv._[0] === 'install' && argv._[1] === 'workflow') {
