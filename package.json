@@ -1,12 +1,12 @@
 {
   "name": "@absolunet/nwayo-cli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "CLI for nwayo",
   "definition": "/nwajo/ (haitian creole) The tough central part of various fruits, containing the seeds.",
-  "homepage": "http://absolunet.github.io/nwayo",
+  "homepage": "https://absolunet.github.io/nwayo",
   "author": {
     "name": "Absolunet",
-    "url": "http://absolunet.com/"
+    "url": "https://absolunet.com"
   },
   "license": "MIT",
   "repository": {
@@ -20,20 +20,20 @@
     "nwayo": "bin/nwayo"
   },
   "engines": {
-    "node": ">= 9.9.0"
+    "node": ">= 10.3.0"
   },
   "scripts": {
     "test": "ava test"
   },
   "devDependencies": {
-    "@absolunet/tester": "1.4.0"
+    "@absolunet/tester": "1.7.0"
   },
   "dependencies": {
-    "@absolunet/fss": "0.7.0",
-    "@absolunet/terminal": "0.4.4",
-    "async": "2.6.0",
-    "bower": "1.8.2",
-    "chalk": "2.3.2",
+    "@absolunet/fss": "0.7.1",
+    "@absolunet/terminal": "0.5.0",
+    "async": "2.6.1",
+    "bower": "1.8.4",
+    "chalk": "2.4.1",
     "cli-spinner": "0.2.8",
     "cross-spawn": "6.0.5",
     "david": "11.0.0",
@@ -42,6 +42,6 @@
     "js-yaml": "3.11.0",
     "minimist": "1.2.0",
     "semver": "5.5.0",
-    "update-notifier": "2.4.0"
+    "update-notifier": "2.5.0"
   }
 }
