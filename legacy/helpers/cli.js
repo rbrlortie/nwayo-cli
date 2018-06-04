@@ -37,6 +37,7 @@ module.exports = {
  ${chalk.yellow('nwayo run')} [${chalk.cyan('<task>')} [${chalk.cyan('<bundle>')}]]   Run a task
  ${chalk.yellow('nwayo rebuild')} [${chalk.cyan('<bundle>')}]        Run rebuild task
  ${chalk.yellow('nwayo watch')} [${chalk.cyan('<bundle>')}]          Run watch task
+ ${chalk.yellow('nwayo install')} [${chalk.cyan('<scope>')}]         Install dependencies ex:[workflow|vendors]
  ${chalk.yellow('nwayo doctor')}                    Diagnose project dependencies
 
  ${chalk.underline('Flag commands')}

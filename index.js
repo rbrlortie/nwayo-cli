@@ -57,6 +57,13 @@ const exit = (msg) => {
 };
 
 
+//-- Boot in legacy mode
+const bootLegacyMode = ({ root }) => {
+	echo(chalk.yellow(`\n [Legacy mode]\n\n`));
+	require('./legacy')({ root });
+};
+
+
 
 
 
@@ -142,7 +149,7 @@ module.exports = () => {
 
 					const completionLogic = `${workflow}/completion`;
 					if (fs.existsSync(completionLogic)) {
-						echo(require(`${workflow}/completion`)({ completion, root }));
+						echo(require(completionLogic)({ completion, root }));
 					} else {
 						echo(require(`./legacy/completion`)({ completion, root }));
 					}
@@ -152,6 +159,17 @@ module.exports = () => {
 				//-- Let's do this
 				obnoxiousNotificator(cliPkg);
 
+
+				//-- Trap `nwayo install vendors` (for nwayo-workflow < 3.5.0)
+				if (Object.keys(argv).length === 1 && argv._.length === 2 && argv._[0] === 'install' && argv._[1] === 'vendors') {
+					if (!fs.existsSync(`${workflow}/cli/install.js`)) {
+						bootLegacyMode({ root });
+						exit();
+					}
+				}
+
+
+				//-- Load workflow
 				require(`${workflow}/cli`)({
 
 					// nwayo-workflow < 3.5.0
@@ -185,8 +203,7 @@ module.exports = () => {
 
 			//-- Let's do this
 			obnoxiousNotificator(cliPkg);
-			echo(chalk.yellow(`\n [Legacy mode]\n\n`));
-			require('./legacy')({ root });
+			bootLegacyMode({ root });
 		}
 
 	// Duuuuude.... Install the workflow

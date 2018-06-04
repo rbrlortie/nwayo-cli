@@ -16,6 +16,7 @@ const TASKS = [
 	'watch'
 ];
 const LEVEL1_FLAGS   = ['-h', '--help', '-v', '--version', '--pronounce'];
+const INSTALL_SCOPES = ['workflow', 'vendors'];
 
 
 const flag = (items, flags) => {
@@ -95,6 +96,10 @@ module.exports = ({ completion, root }) => {
 
 				case 'rebuild':
 					values = bundles(root);
+					break;
+
+				case 'install':
+					values = INSTALL_SCOPES;
 					break;
 
 				default: break;
