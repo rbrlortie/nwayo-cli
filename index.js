@@ -38,7 +38,7 @@ const flag = (name) => {
 //-- Check for updates and be obnoxious about it
 const obnoxiousNotificator = (pkg) => {
 	const updateNotifier = require('update-notifier');
-	updateNotifier({ pkg:pkg, updateCheckInterval:1 }).notify();
+	updateNotifier({ pkg:pkg, updateCheckInterval:1 }).notify({ isGlobal:true });
 };
 
 
