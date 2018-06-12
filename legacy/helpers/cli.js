@@ -34,19 +34,19 @@ module.exports = {
  Usage: ${chalk.yellow('nwayo')} ${chalk.cyan('<command>')}
 
  ${chalk.underline('Project commands')}
- ${chalk.yellow('nwayo run')} [${chalk.cyan('<task>')} [${chalk.cyan('<bundle>')}]]   Run a task
- ${chalk.yellow('nwayo rebuild')} [${chalk.cyan('<bundle>')}]        Run rebuild task
- ${chalk.yellow('nwayo watch')} [${chalk.cyan('<bundle>')}]          Run watch task
- ${chalk.yellow('nwayo install')} [${chalk.cyan('<scope>')}]         Install dependencies ex:[workflow|vendors]
- ${chalk.yellow('nwayo doctor')}                    Diagnose project dependencies
+ ${chalk.yellow('nwayo run')} [${chalk.cyan('<task>')} [${chalk.cyan('<bundle>')}]]       Run a task
+ ${chalk.yellow('nwayo rebuild')} [${chalk.cyan('<bundle>')}]            Run rebuild task
+ ${chalk.yellow('nwayo watch')} [${chalk.cyan('<bundle>')}]              Run watch task
+ ${chalk.yellow('nwayo install')} [${chalk.cyan('<scope>')}] [${chalk.yellow('--force')}]   Install dependencies ex:[workflow|vendors]
+ ${chalk.yellow('nwayo doctor')}                        Diagnose project dependencies
 
  ${chalk.underline('Flag commands')}
- ${chalk.yellow('nwayo --version')}        Get cli version'
- ${chalk.yellow('nwayo --tasks')}          Get cli tasks list
- ${chalk.yellow('nwayo --projecttasks')}   Get project tasks list
- ${chalk.yellow('nwayo --projectbundles')} Get project bundles list
- ${chalk.yellow('nwayo --completion')}     Bash completion code
- ${chalk.yellow('nwayo --pronounce')}      How to pronounce
+ ${chalk.yellow('nwayo --version')}          Get cli version'
+ ${chalk.yellow('nwayo --tasks')}            Get cli tasks list
+ ${chalk.yellow('nwayo --projecttasks')}     Get project tasks list
+ ${chalk.yellow('nwayo --projectbundles')}   Get project bundles list
+ ${chalk.yellow('nwayo --completion')}       Bash completion code
+ ${chalk.yellow('nwayo --pronounce')}        How to pronounce
 
  Legacy mode
  nwayo@${this.pkg.version} ${path.normalize(`${__dirname}/../`)}
@@ -103,6 +103,7 @@ module.exports = {
 
 		}
 
+		// Shouldn't be used anymore
 		return this.error('Build tool not found. Please run `npm install`');
 
 	}

@@ -15,8 +15,9 @@ const TASKS = [
 	'rebuild', 'rebuild-ss',
 	'watch'
 ];
-const LEVEL1_FLAGS   = ['-h', '--help', '-v', '--version', '--pronounce'];
-const INSTALL_SCOPES = ['workflow', 'vendors'];
+const LEVEL1_FLAGS          = ['-h', '--help', '-v', '--version', '--pronounce'];
+const INSTALL_SCOPES        = ['workflow', 'vendors'];
+const INSTALL_WORKFLOW_FLAG = ['--force'];
 
 
 const flag = (items, flags) => {
@@ -112,6 +113,12 @@ module.exports = ({ completion, root }) => {
 
 				case 'run':
 					values = bundles(root);
+					break;
+
+				case 'install':
+					if (items[1] === 'workflow') {
+						values = INSTALL_WORKFLOW_FLAG;
+					}
 					break;
 
 				default: break;

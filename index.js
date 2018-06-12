@@ -19,7 +19,7 @@ const PKG      = 'package.json';
 const WORKFLOW = '@absolunet/nwayo-workflow';
 
 
-//-- Flag helper
+//-- CLI helper
 const argv = minimist(process.argv.slice(2));
 
 const flag = (name) => {
@@ -29,6 +29,20 @@ const flag = (name) => {
 		}
 
 		return argv[name] === true;
+	}
+
+	return false;
+};
+
+const cmd = (command, optionalFlag) => {
+	const [action, scope] = command.split(' ');
+
+	if (argv._.length === 2 && argv._[0] === action && argv._[1] === scope) {
+		if (Object.keys(argv).length === 1) {
+			return true;
+		} else if (optionalFlag && Object.keys(argv).length === 2 && argv[optionalFlag] === true) {
+			return { flag:true };
+		}
 	}
 
 	return false;
@@ -54,6 +68,13 @@ const exit = (msg) => {
 	} else {
 		process.exit();  // eslint-disable-line no-process-exit
 	}
+};
+
+const workflowNotInstalled = () => {
+	exit(`
+		Workflow not installed
+		Please run ${chalk.underline('nwayo install workflow')}
+	`);
 };
 
 
@@ -126,9 +147,27 @@ module.exports = () => {
 		terminal.run(`cd ${root} && npm install --no-audit`);
 	};
 
-	if (Object.keys(argv).length === 1 && argv._.length === 2 && argv._[0] === 'install' && argv._[1] === 'workflow') {
-		npmInstall();
-		exit();
+	const npmCI = () => {
+		const terminal = require('@absolunet/terminal');
+		try {
+			terminal.run(`cd ${root} && npm ci`);
+		} catch (e) {
+			terminal.errorBox(`
+				The package-lock.json file is outdated
+				Please run ${chalk.underline('nwayo install workflow --force')} to update it
+			`);
+		}
+	};
+
+	const installWorkflow = cmd('install workflow', 'force');
+	if (installWorkflow) {
+		if (installWorkflow === true) {
+			npmCI();
+			exit();
+		} else if (installWorkflow.flag === true) {
+			npmInstall();
+			exit();
+		}
 	}
 
 
@@ -161,7 +200,7 @@ module.exports = () => {
 
 
 				//-- Trap `nwayo install vendors` (for nwayo-workflow < 3.5.0)
-				if (Object.keys(argv).length === 1 && argv._.length === 2 && argv._[0] === 'install' && argv._[1] === 'vendors') {
+				if (cmd('install vendors') === true) {
 					if (!fs.existsSync(`${workflow}/cli/install.js`)) {
 						bootLegacyMode({ root });
 						exit();
@@ -180,15 +219,14 @@ module.exports = () => {
 					},
 
 					// nwayo-workflow >= 3.5.0
-					cliPkg:            cliPkg,
-					cliPath:           __dirname,
-					workflowInstaller: npmInstall
+					cliPkg:  cliPkg,
+					cliPath: __dirname
 
 				});
 
 			// Duuuuude.... Install the workflow
 			} else {
-				exit(`Workflow not installed\nPlease run ${chalk.underline('nwayo install workflow')}`);
+				workflowNotInstalled();
 			}
 
 		//-- Ricochet to legacy
@@ -208,7 +246,7 @@ module.exports = () => {
 
 	// Duuuuude.... Install the workflow
 	} else {
-		exit(`Workflow not installed\nPlease run ${chalk.underline('nwayo install workflow')}`);
+		workflowNotInstalled();
 	}
 
 };
