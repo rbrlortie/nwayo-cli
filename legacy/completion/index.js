@@ -37,6 +37,8 @@ const level1Cmds = () => {
 		}
 	});
 
+	list.push('outdated', 'update');
+
 	return list;
 };
 

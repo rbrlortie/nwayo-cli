@@ -37,7 +37,10 @@ const flag = (name) => {
 const cmd = (command, optionalFlag) => {
 	const [action, scope] = command.split(' ');
 
-	if (argv._.length === 2 && argv._[0] === action && argv._[1] === scope) {
+	if (argv._[0] === action && (
+		argv._.length === 1 ||
+		(argv._.length === 2 && argv._[1] === scope)
+	)) {
 		if (Object.keys(argv).length === 1) {
 			return true;
 		} else if (optionalFlag && Object.keys(argv).length === 2 && argv[optionalFlag] === true) {
@@ -48,12 +51,6 @@ const cmd = (command, optionalFlag) => {
 	return false;
 };
 
-
-//-- Check for updates and be obnoxious about it
-const obnoxiousNotificator = (pkg) => {
-	const updateNotifier = require('update-notifier');
-	updateNotifier({ pkg:pkg, updateCheckInterval:1 }).notify({ isGlobal:true });
-};
 
 
 //-- Nano wrappers to refrain the use of packages
@@ -76,6 +73,54 @@ const workflowNotInstalled = () => {
 		Please run ${chalk.underline('nwayo install workflow')}
 	`);
 };
+
+
+
+//-- Check for updates and be obnoxious about it
+const obnoxiousNotificator = (pkg, sync = false) => {
+	const boxen          = require('boxen');
+	const updateNotifier = require('update-notifier');
+
+	const message = (update = {}) => {
+		return `Update available ${chalk.dim(update.current)} ${chalk.reset('→')} ${chalk.green(update.latest)}\nRun ${chalk.cyan('nwayo update')} to update`;
+	};
+
+	const options = {
+		pkg: pkg,
+		updateCheckInterval: 1
+	};
+
+	if (sync) {
+		options.callback = (error, update) => {
+			if (!error) {
+				if (update.current !== update.latest) {
+					echo(boxen(message(update), {
+						padding:     1,
+						margin:      1,
+						align:       'center',
+						borderColor: 'yellow',
+						borderStyle: 'round'
+					}));
+				}
+			} else {
+				exit(error);
+			}
+		};
+	}
+
+	const notifier = updateNotifier(options);
+
+	if (!sync) {
+		notifier.notify({ message:message(notifier.update) });
+	}
+};
+
+//-- Check for updates
+const checkUpdate = (pkg, callback) => {
+	const updateNotifier = require('update-notifier');
+	updateNotifier({ pkg:pkg, updateCheckInterval:1, callback:callback });
+};
+
 
 
 //-- Boot in legacy mode
@@ -103,152 +148,178 @@ module.exports = () => {
 	} else if (flag('completion')) {
 		echo(fs.readFileSync(`${__dirname}/completion/bash`, 'utf8'));
 		exit();
-	}
 
+	//-- Trap `outdated`
+	} else if (cmd('outdated')) {
+		obnoxiousNotificator(cliPkg, true);
 
-	//-- Set nwayo root
-	const configFilepath = findUp.sync(CONFIG, { cwd:process.cwd() });
-	let config;
-	let root = process.cwd();
+	//-- Trap `update`
+	} else if (cmd('update')) {
+		checkUpdate(cliPkg, (error, update) => {
+			if (!error) {
+				const terminal = require('@absolunet/terminal');
 
-	if (configFilepath !== null) {
-		config = yaml.safeLoad(fs.readFileSync(configFilepath, 'utf8'));
+				terminal.spacer();
 
-		if (config && config.root) {
-			root = path.normalize(`${path.dirname(configFilepath)}/${config.root}`);
-		} else {
-			exit(`No root defined in ${chalk.underline(CONFIG)}`);
-		}
-	}
+				if (update.current !== update.latest) {
+					echo(`Update available: ${chalk.dim(update.current)} ${chalk.reset('→')} ${chalk.green(update.latest)}\n\nUpdating...`);
+				} else {
+					echo('No update available\n\nReinstalling...');
+				}
 
+				terminal.spacer();
+				terminal.run('npm uninstall -g @absolunet/nwayo-cli && npm install -g @absolunet/nwayo-cli');
 
-	//-- Search for 'package.json'
-	const projetPkgPath = `${root}/${PKG}`;
-	let projetPkg;
+			} else {
+				exit(error);
+			}
+		});
 
-	if (fs.existsSync(projetPkgPath)) {
-		projetPkg = require(projetPkgPath);
-	} else if (config) {
-		exit(`No ${chalk.underline(PKG)} found under root defined in ${chalk.underline(CONFIG)}`);
 	} else {
-		exit(`No ${chalk.underline(CONFIG)} or ${chalk.underline(PKG)} found`);
-	}
 
+		//-- Set nwayo root
+		const configFilepath = findUp.sync(CONFIG, { cwd:process.cwd() });
+		let config;
+		let root = process.cwd();
 
-	//-- Trap `nwayo install workflow`
-	const nodeModules = `${root}/node_modules`;
-	const npmInstall = () => {
-		const fss      = require('@absolunet/fss');
-		const terminal = require('@absolunet/terminal');
+		if (configFilepath !== null) {
+			config = yaml.safeLoad(fs.readFileSync(configFilepath, 'utf8'));
 
-		fss.del(nodeModules);
-		fss.del(`${root}/package-lock.json`);
-
-		terminal.run(`cd ${root} && npm install --no-audit`);
-	};
-
-	const npmCI = () => {
-		const terminal = require('@absolunet/terminal');
-		try {
-			terminal.run(`cd ${root} && npm ci`);
-		} catch (e) {
-			terminal.errorBox(`
-				The package-lock.json file is outdated
-				Please run ${chalk.underline('nwayo install workflow --force')} to update it
-			`);
+			if (config && config.root) {
+				root = path.normalize(`${path.dirname(configFilepath)}/${config.root}`);
+			} else {
+				exit(`No root defined in ${chalk.underline(CONFIG)}`);
+			}
 		}
-	};
 
-	const installWorkflow = cmd('install workflow', 'force');
-	if (installWorkflow) {
-		if (installWorkflow === true) {
-			npmCI();
-			exit();
-		} else if (installWorkflow.flag === true) {
-			npmInstall();
-			exit();
+
+		//-- Search for 'package.json'
+		const projetPkgPath = `${root}/${PKG}`;
+		let projetPkg;
+
+		if (fs.existsSync(projetPkgPath)) {
+			projetPkg = require(projetPkgPath);
+		} else if (config) {
+			exit(`No ${chalk.underline(PKG)} found under root defined in ${chalk.underline(CONFIG)}`);
+		} else {
+			exit(`No ${chalk.underline(CONFIG)} or ${chalk.underline(PKG)} found`);
 		}
-	}
 
 
-	//-- Are dependencies installed ?
-	if (fs.existsSync(nodeModules)) {
+		//-- Trap `nwayo install workflow`
+		const nodeModules = `${root}/node_modules`;
+		const npmInstall = () => {
+			const fss      = require('@absolunet/fss');
+			const terminal = require('@absolunet/terminal');
 
-		//-- If uses workflow as a package
-		if (projetPkg.dependencies && projetPkg.dependencies[WORKFLOW]) {
+			fss.del(nodeModules);
+			fss.del(`${root}/package-lock.json`);
 
-			const workflow = `${nodeModules}/${WORKFLOW}`;
+			terminal.run(`cd ${root} && npm install --no-audit`);
+		};
 
-			// If workflow package is present
-			if (fs.existsSync(workflow)) {
+		const npmCI = () => {
+			const terminal = require('@absolunet/terminal');
+			try {
+				terminal.run(`cd ${root} && npm ci`);
+			} catch (e) {
+				terminal.errorBox(`
+					The package-lock.json file is outdated
+					Please run ${chalk.underline('nwayo install workflow --force')} to update it
+				`);
+			}
+		};
+
+		const installWorkflow = cmd('install workflow', 'force');
+		if (installWorkflow) {
+			if (installWorkflow === true) {
+				npmCI();
+				exit();
+			} else if (installWorkflow.flag === true) {
+				npmInstall();
+				exit();
+			}
+		}
+
+
+		//-- Are dependencies installed ?
+		if (fs.existsSync(nodeModules)) {
+
+			//-- If uses workflow as a package
+			if (projetPkg.dependencies && projetPkg.dependencies[WORKFLOW]) {
+
+				const workflow = `${nodeModules}/${WORKFLOW}`;
+
+				// If workflow package is present
+				if (fs.existsSync(workflow)) {
+
+					//-- Trap `--completion-logic`
+					const completion = flag('completion-logic');
+					if (completion) {
+
+						const completionLogic = `${workflow}/completion`;
+						if (fs.existsSync(completionLogic)) {
+							echo(require(completionLogic)({ completion, root }));
+						} else {
+							echo(require(`./legacy/completion`)({ completion, root }));
+						}
+						exit();
+					}
+
+					//-- Let's do this
+					obnoxiousNotificator(cliPkg);
+
+
+					//-- Trap `nwayo install vendors` (for nwayo-workflow < 3.5.0)
+					if (cmd('install vendors') === true) {
+						if (!fs.existsSync(`${workflow}/cli/install.js`)) {
+							bootLegacyMode({ root });
+							exit();
+						}
+					}
+
+
+					//-- Load workflow
+					require(`${workflow}/cli`)({
+
+						// nwayo-workflow < 3.5.0
+						cwd:    root,
+						infos:  {
+							version: cliPkg.version,
+							path:    __dirname
+						},
+
+						// nwayo-workflow >= 3.5.0
+						cliPkg:  cliPkg,
+						cliPath: __dirname
+
+					});
+
+				// Duuuuude.... Install the workflow
+				} else {
+					workflowNotInstalled();
+				}
+
+			//-- Ricochet to legacy
+			} else {
 
 				//-- Trap `--completion-logic`
 				const completion = flag('completion-logic');
 				if (completion) {
-
-					const completionLogic = `${workflow}/completion`;
-					if (fs.existsSync(completionLogic)) {
-						echo(require(completionLogic)({ completion, root }));
-					} else {
-						echo(require(`./legacy/completion`)({ completion, root }));
-					}
+					echo(require(`./legacy/completion`)({ completion, root }));
 					exit();
 				}
 
 				//-- Let's do this
 				obnoxiousNotificator(cliPkg);
-
-
-				//-- Trap `nwayo install vendors` (for nwayo-workflow < 3.5.0)
-				if (cmd('install vendors') === true) {
-					if (!fs.existsSync(`${workflow}/cli/install.js`)) {
-						bootLegacyMode({ root });
-						exit();
-					}
-				}
-
-
-				//-- Load workflow
-				require(`${workflow}/cli`)({
-
-					// nwayo-workflow < 3.5.0
-					cwd:    root,
-					infos:  {
-						version: cliPkg.version,
-						path:    __dirname
-					},
-
-					// nwayo-workflow >= 3.5.0
-					cliPkg:  cliPkg,
-					cliPath: __dirname
-
-				});
-
-			// Duuuuude.... Install the workflow
-			} else {
-				workflowNotInstalled();
+				bootLegacyMode({ root });
 			}
 
-		//-- Ricochet to legacy
+		// Duuuuude.... Install the workflow
 		} else {
-
-			//-- Trap `--completion-logic`
-			const completion = flag('completion-logic');
-			if (completion) {
-				echo(require(`./legacy/completion`)({ completion, root }));
-				exit();
-			}
-
-			//-- Let's do this
-			obnoxiousNotificator(cliPkg);
-			bootLegacyMode({ root });
+			workflowNotInstalled();
 		}
-
-	// Duuuuude.... Install the workflow
-	} else {
-		workflowNotInstalled();
 	}
-
 };
 
 /* eslint-enable global-require */

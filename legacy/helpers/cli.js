@@ -40,9 +40,11 @@ module.exports = {
  ${chalk.yellow('nwayo install')} [${chalk.cyan('<scope>')}] [${chalk.yellow('--force')}]   Install dependencies ex:[workflow|vendors]
  ${chalk.yellow('nwayo doctor')}                        Diagnose project dependencies
 
- ${chalk.underline('Flag commands')}
- ${chalk.yellow('nwayo --version')}          Get cli version'
- ${chalk.yellow('nwayo --tasks')}            Get cli tasks list
+ ${chalk.underline('CLI commands')}
+ ${chalk.yellow('nwayo update')}             Update the CLI
+ ${chalk.yellow('nwayo outdated')}           Check if CLI is outdated
+ ${chalk.yellow('nwayo --version')}          Get CLI version
+ ${chalk.yellow('nwayo --tasks')}            Get CLI tasks list
  ${chalk.yellow('nwayo --projecttasks')}     Get project tasks list
  ${chalk.yellow('nwayo --projectbundles')}   Get project bundles list
  ${chalk.yellow('nwayo --completion')}       Bash completion code
