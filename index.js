@@ -17,6 +17,7 @@ const path     = require('path');
 const CONFIG   = 'nwayo.yaml';
 const PKG      = 'package.json';
 const WORKFLOW = '@absolunet/nwayo-workflow';
+const WORKFLOWFORK = '@rbrlortie/nwayo-workflow';
 
 
 //-- CLI helper
@@ -246,9 +247,14 @@ module.exports = () => {
 		if (fs.existsSync(nodeModules)) {
 
 			//-- If uses workflow as a package
-			if (projetPkg.dependencies && projetPkg.dependencies[WORKFLOW]) {
+			if (projetPkg.dependencies && projetPkg.dependencies[WORKFLOW] || projetPkg.dependencies && projetPkg.dependencies[WORKFLOWFORK] ) {
 
-				const workflow = `${nodeModules}/${WORKFLOW}`;
+				let workflow = '';
+				if(projetPkg.dependencies[WORKFLOW]) {
+					workflow = `${nodeModules}/${WORKFLOW}`;
+				} else if(projetPkg.dependencies[WORKFLOWFORK]) {
+					workflow = `${nodeModules}/${WORKFLOWFORK}`;
+				}
 
 				// If workflow package is present
 				if (fs.existsSync(workflow)) {
