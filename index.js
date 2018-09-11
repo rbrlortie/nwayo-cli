@@ -169,7 +169,7 @@ module.exports = () => {
 				}
 
 				terminal.spacer();
-				terminal.run('npm uninstall -g @absolunet/nwayo-cli && npm install -g @absolunet/nwayo-cli');
+				terminal.run('npm uninstall -g @rbrlortie/nwayo-cli && npm install -g @rbrlortie/nwayo-cli');
 
 			} else {
 				exit(error);
@@ -283,7 +283,6 @@ module.exports = () => {
 							exit();
 						}
 					}
-
 
 					//-- Load workflow
 					require(`${workflow}/cli`)({

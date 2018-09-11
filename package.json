@@ -1,5 +1,5 @@
 {
-  "name": "@absolunet/nwayo-cli",
+  "name": "@rbrlortie/nwayo-cli",
   "version": "1.4.0",
   "description": "CLI for nwayo",
   "definition": "/nwajo/ (haitian creole) The tough central part of various fruits, containing the seeds.",
@@ -17,7 +17,7 @@
     "url": "https://github.com/absolunet/nwayo-cli/issues"
   },
   "bin": {
-    "nwayo": "bin/nwayo"
+    "rbnwayo": "bin/rbnwayo"
   },
   "engines": {
     "node": ">= 10.5.0"
